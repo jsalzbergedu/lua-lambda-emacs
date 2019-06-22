@@ -43,7 +43,12 @@ Returns non-nil on success, nil on failure"
     (when (re-search-forward lua-lambda-regex nil t nil)
       (let ((beg (match-beginning 0))
             (end (match-end 0)))
-        (when (re-search-forward " end")
+        (when (re-search-forward " end" nil t nil)
+          (when (re-search-backward ";" beg t nil)
+            (let ((o (make-overlay (point) (+ (point) 1))))
+              (overlay-put o 'lua-lambda t)
+              (overlay-put o 'display ""))
+            (re-search-forward " end" nil t nil))
           (let ((o (make-overlay beg (+ beg (length "function")))))
             (overlay-put o 'lua-lambda t)
             (overlay-put o 'display lua-lambda-symbol))
@@ -70,7 +75,7 @@ Returns non-nil on success, nil on failure"
   nil
   nil
   nil
-  (remove-overlays (point-min) (point-max) 'pseudocode t)
+  (remove-overlays (point-min) (point-max) 'lua-lambda t)
   (when lua-lambda-mode
     (jit-lock-register #'lua-lambda--region t)
     (lua-lambda--region (point-min) (point-max))))
