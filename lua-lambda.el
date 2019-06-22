@@ -23,6 +23,11 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
+;; When you have a function of the form
+;; function(x) return y end
+;; then lua-lambda-mode will overlay that as
+;; λ(x) y
+;; for greater readability
 
 ;;; Code:
 (defvar lua-lambda-symbol "λ"
@@ -71,4 +76,5 @@ Returns non-nil on success, nil on failure"
     (lua-lambda--region (point-min) (point-max))))
 
 
+(provide 'lua-lambda)
 ;;; lua-lambda.el ends here
